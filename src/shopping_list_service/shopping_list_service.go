@@ -1,7 +1,6 @@
 package shopping_list_service
 
 type IShoppingListService interface {
-	AddItems(items []ShoppingListItem) (*[]ShoppingListItem, error)
 	AddItem(request AddItemRequest) (*ShoppingListItem, error)
 	GetItems(code string) (*[]ShoppingListItem, error)
 }
@@ -35,18 +34,6 @@ func (s *shoppingListService) AddItem(request AddItemRequest) (*ShoppingListItem
 	}
 
 	return item, nil
-}
-
-func (s *shoppingListService) AddItems(items []ShoppingListItem) (*[]ShoppingListItem, error) {
-	return nil, nil
-
-	// items, err := s.shoppingListRepository.AddItems(items)
-
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	// return &items, nil
 }
 
 func (s *shoppingListService) GetItems(code string) (*[]ShoppingListItem, error) {

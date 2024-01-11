@@ -3,6 +3,9 @@ package postgres_service
 import (
 	"database/sql"
 	"log"
+	"os"
+
+	"github.com/joho/godotenv"
 
 	_ "github.com/lib/pq"
 )
@@ -18,6 +21,7 @@ type postgresService struct {
 var postgresServiceInstance *postgresService
 
 func GetPostgresServiceInstance() *postgresService {
+	log.Println("Getting postgres service instance")
 	if postgresServiceInstance == nil {
 		postgresServiceInstance, _ = newPostgresService()
 	}
@@ -25,7 +29,16 @@ func GetPostgresServiceInstance() *postgresService {
 }
 
 func newPostgresService() (*postgresService, error) {
-	db, err := sql.Open("postgres", "postgres://default:DyMaum9fovO1@ep-misty-union-83632081.eu-central-1.postgres.vercel-storage.com:5432/verceldb")
+	err := godotenv.Load()
+
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	postgresURL := os.Getenv("POSTGRES_URL")
+
+	db, err := sql.Open("postgres", postgresURL)
 	if err != nil {
 		log.Println(err)
 		return nil, err
