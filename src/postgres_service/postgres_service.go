@@ -38,8 +38,6 @@ func newPostgresService() (*postgresService, error) {
 
 	postgresURL := os.Getenv("POSTGRES_URL")
 
-	log.Println("Connecting to postgres at: " + postgresURL)
-
 	db, err := sql.Open("postgres", postgresURL)
 	if err != nil {
 		log.Println(err)
