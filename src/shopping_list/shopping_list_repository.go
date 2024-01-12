@@ -33,6 +33,7 @@ func GetShoppingListRepositoryInstance() *shoppingListRepository {
 func newShoppingListRepository() *shoppingListRepository {
 	return &shoppingListRepository{
 		postgresService: nPS.GetPostgresServiceInstance(),
+		roomRepository:  nRR.GetRoomRepositoryInstance(),
 	}
 }
 
