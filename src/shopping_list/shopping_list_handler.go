@@ -50,7 +50,6 @@ func (h *shoppingListServiceHandler) HandleAddItem(c *gin.Context) {
 		return
 	}
 
-	// c.JSON(200, gin.H{"code": items})
 	c.JSON(200, gin.H{"item": item})
 }
 
@@ -58,7 +57,6 @@ func (h *shoppingListServiceHandler) HandleGetItems(c *gin.Context) {
 	log.Println("HandleGetItems")
 	var request GetItemsRequest
 
-	// get code from url items/:code
 	request.Code = c.Param("code")
 
 	items, err := h.shoppingListService.GetItems(request.Code)

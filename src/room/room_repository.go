@@ -4,12 +4,13 @@ import (
 	"errors"
 	"log"
 
-	nPS "github.com/noctisbeta/shopping_list/src/postgres_service"
+	nPS "github.com/noctisbeta/shopping_list/src/postgres"
 )
 
 type IRoomRepository interface {
-	CreateRoom(code string) (*Room, error)
-	GetRoom(code string) (*Room, error)
+	CreateRoom(code string) (*GetRoomDB, error)
+	GetRoomByCode(code string) (*GetRoomDB, error)
+	GetRoomByID(code int) (*GetRoomDB, error)
 }
 
 type roomRepository struct {
@@ -31,15 +32,13 @@ func newRoomRepository() *roomRepository {
 	}
 }
 
-func (rr *roomRepository) CreateRoom(code string) (*Room, error) {
+func (rr *roomRepository) CreateRoom(code string) (*GetRoomDB, error) {
 	log.Println("Creating room with code: " + code)
 
-	room := Room{Code: code}
+	room := GetRoomDB{Code: code}
 
-	query := "INSERT INTO rooms (access_code) VALUES ($1)"
+	query := "INSERT INTO rooms (code) VALUES ($1)"
 	result, err := rr.postgresService.GetDB().Exec(query, code)
-
-	log.Println("HERE")
 
 	if err != nil {
 		log.Println(err)
@@ -60,11 +59,25 @@ func (rr *roomRepository) CreateRoom(code string) (*Room, error) {
 	return &room, nil
 }
 
-func (rr *roomRepository) GetRoom(code string) (*Room, error) {
-	room := Room{}
+func (rr *roomRepository) GetRoomByCode(code string) (*GetRoomDB, error) {
+	room := GetRoomDB{}
 
-	query := "SELECT access_code FROM rooms WHERE access_code = $1"
+	query := "SELECT * FROM rooms WHERE access_code = $1"
 	err := rr.postgresService.GetDB().QueryRow(query, code).Scan(&room.Code)
+
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	return &room, nil
+}
+
+func (rr *roomRepository) GetRoomByID(id int) (*GetRoomDB, error) {
+	room := GetRoomDB{}
+
+	query := "SELECT (id, code) FROM rooms WHERE id = $1"
+	err := rr.postgresService.GetDB().QueryRow(query, id).Scan(&room.ID, &room.Code)
 
 	if err != nil {
 		log.Println(err)

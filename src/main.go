@@ -5,8 +5,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	nRS "github.com/noctisbeta/shopping_list/src/room_service"
-	nSLS "github.com/noctisbeta/shopping_list/src/shopping_list_service"
+	nRS "github.com/noctisbeta/shopping_list/src/room"
+	nSLS "github.com/noctisbeta/shopping_list/src/shopping_list"
 )
 
 func setupRoomServiceRoutes(router *gin.Engine) {

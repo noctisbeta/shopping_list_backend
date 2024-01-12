@@ -8,6 +8,7 @@ type RoomGetRequest struct {
 	Code string `json:"code"`
 }
 
-type Room struct {
+type GetRoomDB struct {
+	ID   int
 	Code string
 }

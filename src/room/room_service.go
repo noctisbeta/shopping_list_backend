@@ -3,8 +3,8 @@ package room_service
 import "log"
 
 type IRoomService interface {
-	CreateRoom(code string) (Room, error)
-	GetRoom(code string) (Room, error)
+	CreateRoom(code string) (GetRoomDB, error)
+	GetRoom(code string) (GetRoomDB, error)
 }
 
 type roomService struct {
@@ -26,20 +26,20 @@ func newRoomService() *roomService {
 	}
 }
 
-func (rs *roomService) CreateRoom(code string) (Room, error) {
+func (rs *roomService) CreateRoom(code string) (GetRoomDB, error) {
 	room, err := rs.roomRepository.CreateRoom(code)
 	if err != nil {
 		log.Println(err)
-		return Room{}, err
+		return GetRoomDB{}, err
 	}
 	return *room, nil
 }
 
-func (rs *roomService) GetRoom(code string) (Room, error) {
-	room, err := rs.roomRepository.GetRoom(code)
+func (rs *roomService) GetRoom(code string) (GetRoomDB, error) {
+	room, err := rs.roomRepository.GetRoomByCode(code)
 	if err != nil {
 		log.Println(err)
-		return Room{}, err
+		return GetRoomDB{}, err
 	}
 	return *room, nil
 }
