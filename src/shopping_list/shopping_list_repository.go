@@ -38,7 +38,7 @@ func newShoppingListRepository() *shoppingListRepository {
 
 func (r *shoppingListRepository) AddItem(request AddItemRequest) (*ShoppingListItem, error) {
 
-	id, err := r.GetRoomIdByCode(request.Code)
+	room, err := r.roomRepository.GetRoomByCode(request.Code)
 
 	if err != nil {
 		log.Println(err)
@@ -49,7 +49,7 @@ func (r *shoppingListRepository) AddItem(request AddItemRequest) (*ShoppingListI
 
 	var lastInsertId int
 
-	err = r.postgresService.GetDB().QueryRow(query, request.Name, request.Price, request.Quantity, id).Scan(&lastInsertId)
+	err = r.postgresService.GetDB().QueryRow(query, request.Name, request.Price, request.Quantity, room.ID).Scan(&lastInsertId)
 
 	if err != nil {
 		log.Println(err)
@@ -67,7 +67,7 @@ func (r *shoppingListRepository) AddItem(request AddItemRequest) (*ShoppingListI
 		Price:    request.Price,
 		Quantity: request.Quantity,
 		RoomCode: request.Code,
-		RoomID:   id,
+		RoomID:   lastInsertId,
 	}
 
 	return &item, nil
