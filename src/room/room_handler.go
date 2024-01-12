@@ -53,9 +53,10 @@ func (h *roomServiceHandler) HandleCreateRoom(c *gin.Context) {
 }
 
 func (h *roomServiceHandler) HandleGetRoom(c *gin.Context) {
+	log.Println("HandleGetRoom")
+
 	var request RoomGetRequest
 
-	// get code from url room/:code
 	request.Code = c.Param("code")
 
 	room, err := h.roomService.GetRoom(request.Code)

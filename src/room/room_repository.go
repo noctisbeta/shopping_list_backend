@@ -62,7 +62,7 @@ func (rr *roomRepository) CreateRoom(code string) (*GetRoomDB, error) {
 func (rr *roomRepository) GetRoomByCode(code string) (*GetRoomDB, error) {
 	room := GetRoomDB{}
 
-	query := "SELECT * FROM rooms WHERE access_code = $1"
+	query := "SELECT * FROM rooms WHERE code = $1"
 	err := rr.postgresService.GetDB().QueryRow(query, code).Scan(&room.Code)
 
 	if err != nil {
