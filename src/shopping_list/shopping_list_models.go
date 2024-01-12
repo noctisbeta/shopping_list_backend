@@ -5,7 +5,7 @@ type ShoppingListItem struct {
 	Name     string  `json:"name"`
 	Price    float64 `json:"price"`
 	Quantity int     `json:"quantity"`
-	RoomCode string  `json:"shopping_list_id"`
+	Code     string  `json:"code"`
 	RoomID   int     `json:"room_id"`
 }
 

@@ -67,7 +67,7 @@ func (r *shoppingListRepository) AddItem(request AddItemRequest) (*ShoppingListI
 		Name:     request.Name,
 		Price:    request.Price,
 		Quantity: request.Quantity,
-		RoomCode: request.Code,
+		Code:     request.Code,
 		RoomID:   lastInsertId,
 	}
 
@@ -75,9 +75,16 @@ func (r *shoppingListRepository) AddItem(request AddItemRequest) (*ShoppingListI
 }
 
 func (r *shoppingListRepository) GetItems(code string) (*[]ShoppingListItem, error) {
+	room, err := r.roomRepository.GetRoomByCode(code)
 
-	query := "SELECT * FROM items WHERE shopping_list_id = $1"
-	rows, err := r.postgresService.GetDB().Query(query, code)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	query := "SELECT * FROM items WHERE room_id = $1"
+
+	rows, err := r.postgresService.GetDB().Query(query, room.ID)
 
 	if err != nil {
 		log.Println(err)
@@ -88,7 +95,8 @@ func (r *shoppingListRepository) GetItems(code string) (*[]ShoppingListItem, err
 
 	for rows.Next() {
 		var item ShoppingListItem
-		err = rows.Scan(&item.ID, &item.Name, &item.Price, &item.Quantity, &item.RoomCode)
+		item.Code = code
+		err = rows.Scan(&item.ID, &item.Name, &item.Price, &item.Quantity, &item.RoomID)
 		if err != nil {
 			log.Println(err)
 			return nil, err
@@ -100,10 +108,6 @@ func (r *shoppingListRepository) GetItems(code string) (*[]ShoppingListItem, err
 }
 
 func (r *shoppingListRepository) GetRoomIdByCode(code string) (int, error) {
-	// query := "SELECT id FROM rooms WHERE code = $1"
-
-	// err := r.postgresService.GetDB().QueryRow(query, code).Scan(&id)
-
 	room, err := r.roomRepository.GetRoomByCode(code)
 
 	if err != nil {
